@@ -1,0 +1,36 @@
+.input-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-panel label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.input-panel__input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  border: 2px solid #666;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  transition: all 0.2s;
+  font-family: monospace;
+}
+
+.input-panel__input:focus {
+  outline: none;
+  border-color: #4a9eff;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.2);
+}
+
+.input-panel__info {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-weight: 500;
+}
