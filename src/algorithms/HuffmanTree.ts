@@ -192,6 +192,7 @@ export class HuffmanTree {
    * Find the node with highest ID (most recently created)
    * with the same weight as the given node
    * This maintains the sibling property in the FGK algorithm
+   * IMPORTANT: Must not return the node's parent or children to avoid parent-child swaps
    */
   private findBlockLeader(node: HuffmanNode): HuffmanNode {
     const targetWeight = node.weight;
@@ -203,8 +204,17 @@ export class HuffmanTree {
     }
 
     // Find the node with the highest ID in the weight group
+    // EXCLUDE the node's parent and children to prevent parent-child swaps
     let leader = node;
     for (const candidate of group) {
+      // Skip if candidate is the node's parent
+      if (candidate === node.parent) {
+        continue;
+      }
+      // Skip if candidate is one of the node's children
+      if (candidate === node.left || candidate === node.right) {
+        continue;
+      }
       if (candidate.id > leader.id) {
         leader = candidate;
       }
