@@ -204,10 +204,9 @@ const TreeVisualizationComponent = ({
 
 // Memoize to prevent unnecessary re-renders
 export const TreeVisualization = memo(TreeVisualizationComponent, (prevProps, nextProps) => {
-  // Only re-render if tree structure or highlighted nodes actually changed
-  const treeEqual =
-    prevProps.treeSnapshot.rootId === nextProps.treeSnapshot.rootId &&
-    prevProps.treeSnapshot.nodes.length === nextProps.treeSnapshot.nodes.length;
+  // Re-render if tree nodes or highlighted nodes changed
+  // We need to compare the actual node data (including weights), not just structure
+  const treeEqual = JSON.stringify(prevProps.treeSnapshot) === JSON.stringify(nextProps.treeSnapshot);
 
   const highlightedEqual =
     JSON.stringify(prevProps.highlightedNodes) === JSON.stringify(nextProps.highlightedNodes);

@@ -34,12 +34,9 @@ export function useEncoder(message: string): UseEncoderResult {
     setEncoderIndex((prev) => prev + 1);
   }, [encoder, encoderIndex, message]);
 
-  // Memoize encoder state to avoid re-serialization on every render
-  const encoderState = useMemo(() => encoder.getState(), [encoder, encoderIndex]);
-  const encoderProcessedChars = useMemo(
-    () => encoderState.processedSymbols.join(''),
-    [encoderState]
-  );
+  // Get fresh encoder state on every render to ensure we show updated weights
+  const encoderState = encoder.getState();
+  const encoderProcessedChars = encoderState.processedSymbols.join('');
 
   return {
     encoderTree: encoderState.treeSnapshot,
