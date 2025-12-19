@@ -29,6 +29,7 @@ export class HuffmanTree {
 		}
 
 		this.ensureSiblingProperty(this.root);
+		this.updateNodeIDs();
 	}
 
 	private splitNYT(symbol: string): void {
@@ -100,6 +101,20 @@ export class HuffmanTree {
 
 		this.ensureSiblingProperty(node.left);
 		this.ensureSiblingProperty(node.right);
+	}
+
+	private updateNodeIDs() {
+		let currentId = 1;
+
+		const queue: HuffmanNode[] = [this.root];
+
+		while (queue.length > 0) {
+			const node = queue.shift()!;
+			node.id = currentId++;
+
+			if (node.right) queue.push(node.right);
+			if (node.left) queue.push(node.left);
+		}
 	}
 
 	serialize(): TreeSnapshot {

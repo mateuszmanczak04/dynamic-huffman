@@ -186,7 +186,7 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 									fontSize='10'
 									pointerEvents='none'
 								>
-									w:{node.data.weight}
+									w:{node.data.weight}, id:{node.data.id}
 								</text>
 							</g>
 						);
