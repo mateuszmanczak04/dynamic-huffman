@@ -141,8 +141,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 								key={`node-${node.data.id}`}
 								transform={`translate(${node.x}, ${node.y})`}
 								className='cursor-pointer'>
-								{/* Node shape */}
-								{isNYT ? (
+								{/* Node shape - rectangles for leaves, circles for internal nodes */}
+								{isLeaf ? (
 									<rect
 										x={-15}
 										y={-15}
