@@ -1,14 +1,10 @@
 import { SerializedNode } from './types';
 
-/**
- * Node in the dynamic Huffman tree
- * Used in the FGK (Faller-Gallager-Knuth) adaptive Huffman algorithm
- */
 export class HuffmanNode {
 	id: number;
 	weight: number;
 	symbol: string | null;
-	isNYT: boolean; // Not Yet Transmitted marker
+	isNYT: boolean;
 	left: HuffmanNode | null;
 	right: HuffmanNode | null;
 	parent: HuffmanNode | null;
@@ -28,9 +24,6 @@ export class HuffmanNode {
 		this.parent = null;
 	}
 
-	/**
-	 * Check if this is a leaf node (has a symbol or is NYT)
-	 */
 	isLeaf(): boolean {
 		return this.left === null && this.right === null;
 	}
@@ -68,24 +61,5 @@ export class HuffmanNode {
 			rightId: this.right?.id ?? null,
 			parentId: this.parent?.id ?? null,
 		};
-	}
-
-	/**
-	 * Create a deep copy of this node and its subtree
-	 */
-	clone(): HuffmanNode {
-		const newNode = new HuffmanNode(this.id, this.weight, this.symbol, this.isNYT);
-
-		if (this.left) {
-			newNode.left = this.left.clone();
-			newNode.left.parent = newNode;
-		}
-
-		if (this.right) {
-			newNode.right = this.right.clone();
-			newNode.right.parent = newNode;
-		}
-
-		return newNode;
 	}
 }

@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { memo, useMemo } from 'react';
-import { SerializedNode, TreeSnapshot } from '../../algorithms/types';
+import { SerializedNode, TreeSnapshot } from '../algorithms/types';
 
 interface TreeVisualizationProps {
 	treeSnapshot: TreeSnapshot;
@@ -88,7 +88,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 				width={width}
 				height={height}
 				viewBox={`0 0 ${width} ${height}`}
-				className='h-auto max-w-full'>
+				className='h-auto max-w-full'
+			>
 				<g transform={`translate(${marginLeft}, ${marginTop})`}>
 					{/* Draw links */}
 					{links.map((link, index) => (
@@ -109,7 +110,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 								fill='#aaa'
 								fontSize='12'
 								fontWeight='bold'
-								textAnchor='middle'>
+								textAnchor='middle'
+							>
 								{link.target === (link.source as any).children?.[0] ? '0' : '1'}
 							</text>
 						</g>
@@ -140,7 +142,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 							<g
 								key={`node-${node.data.id}`}
 								transform={`translate(${node.x}, ${node.y})`}
-								className='cursor-pointer'>
+								className='cursor-pointer'
+							>
 								{/* Node shape - rectangles for leaves, circles for internal nodes */}
 								{isLeaf ? (
 									<rect
@@ -170,7 +173,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 									fill='white'
 									fontSize='12'
 									fontWeight='bold'
-									pointerEvents='none'>
+									pointerEvents='none'
+								>
 									{isNYT ? 'NYT' : node.data.symbol || ''}
 								</text>
 
@@ -180,7 +184,8 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 									textAnchor='middle'
 									fill='#aaa'
 									fontSize='10'
-									pointerEvents='none'>
+									pointerEvents='none'
+								>
 									w:{node.data.weight}
 								</text>
 							</g>

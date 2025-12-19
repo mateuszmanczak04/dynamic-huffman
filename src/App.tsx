@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TreeVisualization } from './components/Visualization/TreeVisualization';
+import { TreeVisualization } from './components/TreeVisualization';
 import { useEncoder } from './hooks/useEncoder';
 
 function App() {
@@ -32,7 +32,8 @@ function App() {
 				<button
 					onClick={encodeNext}
 					disabled={!canEncode}
-					className='mb-4 bg-green-600 px-3 py-1 text-white'>
+					className='mb-4 bg-green-600 px-3 py-1 text-white'
+				>
 					Encode Next Character
 				</button>
 
