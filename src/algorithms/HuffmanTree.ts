@@ -106,21 +106,22 @@ export class HuffmanTree {
 	 */
 	private splitNYT(symbol: string): void {
 		const oldNYT = this.nytNode;
+		const oldNYTParent = oldNYT.parent;
 
 		// Remove old NYT from weight group
 		this.removeNodeFromWeightGroup(oldNYT, oldNYT.weight);
 
-		// IMPORTANT: Create nodes in specific order to maintain Vitter's invariant:
-		// "Leaf nodes must have lower IDs than internal nodes at the same weight"
+		// FGK Algorithm: Create new nodes with initial weight of 1 (not 0!)
+		// Only NYT keeps weight 0
 
-		// Create new NYT node (left child) - lowest ID
+		// Create new NYT node (left child) - keeps weight 0
 		const newNYT = new HuffmanNode(this.nodeCounter++, 0, null, true);
 
-		// Create leaf node for the symbol (right child) - middle ID
-		const leafNode = new HuffmanNode(this.nodeCounter++, 0, symbol, false);
+		// Create leaf node for the symbol (right child) - weight 1
+		const leafNode = new HuffmanNode(this.nodeCounter++, 1, symbol, false);
 
-		// Create new internal node to replace old NYT - highest ID
-		const newInternal = new HuffmanNode(this.nodeCounter++, 0, null, false);
+		// Create new internal node to replace old NYT - weight 1
+		const newInternal = new HuffmanNode(this.nodeCounter++, 1, null, false);
 
 		// Set up tree structure
 		newInternal.left = newNYT;
@@ -129,16 +130,16 @@ export class HuffmanTree {
 		leafNode.parent = newInternal;
 
 		// Replace old NYT with new internal node
-		if (oldNYT.parent === null) {
+		if (oldNYTParent === null) {
 			// NYT was root
 			this.root = newInternal;
 		} else {
-			if (oldNYT.parent.left === oldNYT) {
-				oldNYT.parent.left = newInternal;
+			if (oldNYTParent.left === oldNYT) {
+				oldNYTParent.left = newInternal;
 			} else {
-				oldNYT.parent.right = newInternal;
+				oldNYTParent.right = newInternal;
 			}
-			newInternal.parent = oldNYT.parent;
+			newInternal.parent = oldNYTParent;
 		}
 
 		// Update NYT reference
@@ -152,9 +153,9 @@ export class HuffmanTree {
 		this.addNodeToWeightGroup(newNYT);
 		this.addNodeToWeightGroup(leafNode);
 
-		// Increment the leaf node (and all ancestors up to root)
-		// This follows the standard FGK algorithm
-		this.incrementNode(leafNode);
+		// FGK Algorithm: Start updating from the parent of the new internal node
+		// NOT from the leaf node!
+		this.incrementNode(oldNYTParent);
 	}
 
 	/**
@@ -221,10 +222,10 @@ export class HuffmanTree {
 	}
 
 	/**
-	 * Find the node with highest ID (most recently created)
-	 * with the same weight as the given node
+	 * Find the "highest numbered" node in the FGK algorithm sense
+	 * In FGK, "highest numbered" means the node that appears last in implicit ordering
+	 * With our ID system, LOWER ID = created earlier = "higher numbered" in FGK
 	 * This maintains the sibling property in the FGK algorithm
-	 * IMPORTANT: Must not return the node's parent or children to avoid parent-child swaps
 	 */
 	private findBlockLeader(node: HuffmanNode): HuffmanNode {
 		const targetWeight = node.weight;
@@ -235,17 +236,27 @@ export class HuffmanTree {
 			return node;
 		}
 
-		// Find the node with the highest ID in the weight group
-		// EXCLUDE the node's parent and children to prevent parent-child swaps
-		// ALSO exclude any ancestors or descendants to prevent cycles
+		// Find the node with LOWEST ID (earliest created) in the weight group
+		// This is the "highest numbered" node in FGK implicit numbering
+		// EXCLUDE ancestors/descendants to prevent cycles
 		let leader = node;
+		let foundNonSelf = false;
+
 		for (const candidate of group) {
+			// Skip the node itself initially
+			if (candidate === node) {
+				continue;
+			}
+
 			// Skip if candidate has an ancestor/descendant relationship with node
 			if (this.isAncestorOrDescendant(node, candidate)) {
 				continue;
 			}
-			if (candidate.id > leader.id) {
+
+			// Find the candidate with LOWEST ID (not highest!)
+			if (!foundNonSelf || candidate.id < leader.id) {
 				leader = candidate;
+				foundNonSelf = true;
 			}
 		}
 
