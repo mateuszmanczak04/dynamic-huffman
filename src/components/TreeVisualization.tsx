@@ -88,8 +88,7 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 				width={width}
 				height={height}
 				viewBox={`0 0 ${width} ${height}`}
-				className='h-auto max-w-full'
-			>
+				className='h-auto max-w-full'>
 				<g transform={`translate(${marginLeft}, ${marginTop})`}>
 					{/* Draw links */}
 					{links.map((link, index) => (
@@ -110,8 +109,7 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 								fill='#aaa'
 								fontSize='12'
 								fontWeight='bold'
-								textAnchor='middle'
-							>
+								textAnchor='middle'>
 								{link.target === (link.source as any).children?.[0] ? '0' : '1'}
 							</text>
 						</g>
@@ -142,15 +140,14 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 							<g
 								key={`node-${node.data.id}`}
 								transform={`translate(${node.x}, ${node.y})`}
-								className='cursor-pointer'
-							>
+								className='cursor-pointer'>
 								{/* Node shape - rectangles for leaves, circles for internal nodes */}
 								{isLeaf ? (
 									<rect
-										x={-15}
-										y={-15}
-										width={30}
-										height={30}
+										x={-30}
+										y={-30}
+										width={60}
+										height={60}
 										fill={fill}
 										stroke={stroke}
 										strokeWidth={strokeWidth}
@@ -158,7 +155,7 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 									/>
 								) : (
 									<circle
-										r={15}
+										r={30}
 										fill={fill}
 										stroke={stroke}
 										strokeWidth={strokeWidth}
@@ -168,25 +165,31 @@ const TreeVisualizationComponent = ({ treeSnapshot }: TreeVisualizationProps) =>
 
 								{/* Node label */}
 								<text
-									dy='.35em'
+									dy='-1em'
 									textAnchor='middle'
 									fill='white'
-									fontSize='12'
+									fontSize='10'
 									fontWeight='bold'
-									pointerEvents='none'
-								>
+									pointerEvents='none'>
 									{isNYT ? 'NYT' : node.data.symbol || ''}
 								</text>
 
-								{/* Weight label */}
 								<text
-									dy='2.5em'
+									dy='0.4em'
 									textAnchor='middle'
-									fill='#aaa'
+									fill='white'
 									fontSize='10'
-									pointerEvents='none'
-								>
-									w:{node.data.weight}, id:{node.data.id}
+									pointerEvents='none'>
+									weight={node.data.weight}
+								</text>
+
+								<text
+									dy='1.8em'
+									textAnchor='middle'
+									fill='white'
+									fontSize='10'
+									pointerEvents='none'>
+									{node.data.id}
 								</text>
 							</g>
 						);
